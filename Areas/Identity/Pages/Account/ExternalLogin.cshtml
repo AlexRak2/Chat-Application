@@ -1,0 +1,47 @@
+﻿@page
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<div class="d-flex flex-column align-items-center justify-content-center h-100">
+
+    <div class="col-md-4">
+        <section class="bg-dark text-white p-4 rounded shadow-lg">
+            <h2 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
+            <hr />
+
+            <p id="external-login-description" class="text-info">
+                You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
+                Please enter an email address for this site below and click the Register button to finish
+                logging in.
+            </p>
+            <form asp-page-handler="Confirmation" enctype="multipart/form-data" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label class="text-secondary" asp-for="Input.Email">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input style="text-secondary" asp-for="Input.DisplayName" class="form-control" placeholder="Please enter your name." />
+                    <label class="text-secondary" asp-for="Input.DisplayName">Display Name</label>
+                    <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+                </div>
+                <div class="d-flex flex-column h-25mb-3">
+                    <p asp-for="ProfilePicUpload" class="form-label">Profile Picture</>
+                    <input type="file" asp-for="ProfilePicUpload" class="" />
+                    <span asp-validation-for="ProfilePicUpload" class="text-danger"></span>
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            </form>
+        </section>
+    </div>
+ </div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

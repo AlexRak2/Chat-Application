@@ -1,0 +1,215 @@
+﻿@model SyncChat.Models.Results.DashboardResult;
+
+@{
+    ViewData["Title"] = "Chat Page";
+}
+
+<style>
+    
+    .sidenav {
+        height: 100%; /* Full-height: remove this if you want "auto" height */
+        width: 25%; /* Set the width of the sidebar */
+        position: relative; /* Fixed Sidebar (stay in place on scroll) */
+        z-index: 1; /* Stay on top */
+        top: 0; /* Stay at the top */
+        left: 0;
+        background-color: var(--black); 
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 20px;
+    }
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: var(--navtext);
+        }
+
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+
+
+    .chat-element
+    {
+        width: 90%;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-bottom: 1px solid #36393e;
+        color: #8c8c8c;
+    }
+    .chat-border
+    {
+        width: 60%;
+        height: 100%;
+        position: absolute;
+    }
+    .icon-pfp {
+
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        background-color: #36393e;
+        margin-right: 10px;
+    }
+    
+    .list-group-item
+    {
+        background-color: var(--darkgrey);
+    }
+
+    .list-group-item:hover {
+        background-color: var(--lightgrey);
+    }
+</style>
+
+<main class="chat-group-list h-100 w-100 d-flex">
+    <div class="sidenav d-flex justify-content-start flex-md-column align-items-center">
+        <h2 class="text-primary mb-2 d-flex align-items-center">
+            <div style="margin-right: 5px;">Chat Rooms</div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-door-closed" viewBox="0 0 16 16">
+                <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3zm1 13h8V2H4z" />
+                <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0" />
+            </svg>
+        </h2>
+        
+        <div class="w-75" style="height: 5%;   border-top: 1px solid var(--lightgrey);"></div>
+
+        <div id="groupId" class="visually-hidden">
+            @if (Model.SelectedChat != null)
+            {
+                @Model.SelectedChat.ChatId
+            }
+        </div>
+        <div class="list-group  align-items-center" style=" width: 90%;">
+            @foreach (var chat in Model.AllChats)
+            {
+                <a asp-action="Index" asp-route-chatId="@chat.ChatId" class="list-group-item list-group-item-action d-flex align-items-center p-2 mb-2 chat-element" style="height: 70px;">
+                    <div class="w-100 ml-3 d-flex justify-content-between align-items-center">
+                        <strong>@chat.ChatName</strong>
+                        <small class="text-muted">@chat.Users.Count Members</small>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+
+
+    @if (Model.SelectedChat == null)
+    {
+        <div class="w-100 h-100 d-flex align-items-center justify-content-between flex-md-column" style="background-color :var(--darkgrey) ;">
+
+            <div id="chat-container" class="d-flex align-items-center justify-content-center" style="width: 100%; height: 100%;">
+
+                <div class="text-white h1">Join a chat room!</div>
+            </div>
+
+        </div>
+
+        <div class="user-group-list sidenav d-flex justify-content-start flex-md-column align-items-center">
+            <h2 class="text-primary mb-2 d-flex align-items-center">
+                Members
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
+                </svg>
+            </h2>
+            <div class="w-75" style="height: 5%;   border-top: 1px solid var(--lightgrey);"></div>
+
+        </div>
+
+    }
+    else
+    {
+
+        <div class="w-100 h-100 d-flex align-items-center justify-content-between flex-md-column" style="background-color :var(--darkgrey) ;">
+
+            @* Chat *@
+
+            <div id="chat-container" class="d-flex flex-md-column bottom-0 overflow-auto" style="width: 95%; height: 100%;">
+
+                @if (Model.SelectedChat != null)
+                {
+                    @foreach (var message in Model.SelectedChat.Messages)
+                    {
+                        <div class="w-100 d-flex align-items-start p-2">
+                            <img class="icon-pfp m-2" width="128" class=" mx-auto mb-2" src=" @message.Owner.ProfilePicture.Path" alt=" @message.Owner.ProfilePicture.Path" />
+
+                            <div class="w-75">
+                                <div class="w-50 d-flex align-items-center text-white">
+
+                                     @message.Owner.DisplayName
+
+
+                                    <div class="text-secondary m-2" style="font-size: 10px;">
+                                        @{
+                                            string format = "";
+
+                                            if (message.SentAt.Date == DateTime.Today)
+                                            {
+                                                format = "Today " + message.SentAt.ToString("h:mm tt");
+                                            }
+                                            else
+                                            {
+                                                format = message.SentAt.ToString("M/d/yyyy h:mm:ss tt");
+                                            }
+
+                                            @format
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="text-white w-100">
+                                    @message.Content 
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <div class="input-group rounded-left mb-4 opacity-50 d-flex align-content-center justify-content-center" style="width: 90%; height: 60px; border: 0;">
+                <div class=" w-75 ">
+                    <input type="text" class="border-0 h-100 rounded-left input-field" style="color: white; background-color: var(--grey); width: 100%; " id="messageText">
+                </div>
+                <div class="input-group-append">
+                    <button id="submitButton" class="btn btn-secondary" type="button">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-group-list sidenav d-flex justify-content-start flex-md-column align-items-center">
+            @if (Model.SelectedChat != null)
+            {
+                <h2 class="text-primary mb-2 d-flex align-items-center">
+
+                    <div style="margin-right: 5px;">Members</div>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
+                    </svg>
+                </h2>
+                <div class="w-75" style="height: 5%;   border-top: 1px solid var(--lightgrey);"></div>
+
+                @foreach (var user in Model.SelectedChat.Users)
+                {
+                    <a href="#" class="chat-element">
+                        <img class="icon-pfp m-2" width="128" class=" mx-auto mb-2" src="@user.ProfilePicture.Path" alt="@user.ProfilePicture.Path" />
+                    @user.DisplayName
+                    </a>
+                }
+            }
+        </div>
+    }
+
+</main>
+
+@section Scripts
+{
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+    <script src="~/js/chat.js" asp-append-version="true"></script>
+
+}

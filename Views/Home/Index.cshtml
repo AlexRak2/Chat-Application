@@ -1,0 +1,47 @@
+﻿@model SyncChat.Models.Results.Statistics;
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    body {
+        background-color: var(--darkgrey);
+    }
+</style>
+<div class="h-100 w-100 d-flex flex-column bg-dark text-white">
+    <div class="m-auto d-flex flex-column w-50 align-items-center">
+        <div class="d-flex flex-column align-items-center text-center mb-4">
+            <div class="d-flex align-items-center mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-chat-text-fill text-primary me-3" viewBox="0 0 16 16">
+                    <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M4.5 5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1z" />
+                </svg>
+                <div class="h1 text-white">Sync Chat</div>
+            </div>
+            <h2 class="text-light">Sync with new people.</h2>
+        </div>
+
+        <div class="w-75 border-top border-light my-4"></div>
+
+        <div class="mb-4 d-flex flex-column align-items-center">
+            <p class="h4 text-secondary">Connects you around the world.</p>
+            <p class="h6 text-primary">@Model.TotalUsers users made, </p>
+            <p class="h6 text-primary">@Model.TotalMessages messages sent. </p>
+        </div>
+
+        <div class="d-flex flex-row justify-content-center">
+            <form class="form-inline me-2" asp-area="Identity" asp-page="/Account/Login">
+                <button type="submit" class="btn btn-primary btn-lg px-4">Login</button>
+            </form>
+            <form class="form-inline ms-2" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" }))">
+                <button type="submit" class="btn btn-outline-light btn-lg px-4">Register</button>
+            </form>
+        </div>
+
+        <div class="w-75 border-top border-light my-4"></div>
+
+        <div class="text-center">
+            <p class="text-muted">Made with ASP.NET</p>
+        </div>
+    </div>
+</div>
